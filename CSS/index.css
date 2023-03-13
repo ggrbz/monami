@@ -1,0 +1,151 @@
+
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+html{
+    scroll-behavior: smooth;
+}
+body{
+    background: rgb(18, 21, 26);
+    width: 100%;
+}
+
+h2{
+    font-family: 'Pacifico', cursive;
+    background: linear-gradient(280deg, rgb(0, 135, 253), purple);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.result{
+    width: 100%;
+    padding: 5px 5px 50px 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.result p{
+    position: relative;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.result .question::selection{
+    color: #000;
+    background: yellow;
+}
+
+.result p span{
+    position: relative;
+    max-width: 80%;
+    min-width: 20%;
+    border-radius: 10px;
+    padding: 5px 10px;
+}
+
+.result .question span{
+    float: right;
+    background: rgb(0, 104, 52);
+    color: rgb(255, 255, 255);
+}
+
+.result .reponse span{
+    float: left;
+    background: rgb(225, 225, 225);
+    color: rgb(40, 40, 40);
+    cursor: pointer;
+}
+
+form{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 5px 20px;
+    height: 50px;
+    background: rgb(18, 21, 26);
+    border-top: 1px solid grey;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form label{
+    color: #fff;
+}
+form input{
+    outline: none;
+    border: 1px solid #ffff;
+    width: 70%;
+    padding: 8px 15px;
+    border-radius: 20px;
+    background: rgb(44, 46, 62);
+    color: #fff;
+}
+
+form input::placeholder{
+    color: rgb(0, 123, 255);
+}
+
+form button{
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 20px;
+    background: rgb(0, 124, 181);
+    color: #fff;
+    border: 2px solid rgb(255, 255, 255);
+    transition: .5s;
+}
+
+form button:hover{
+    background: rgb(0, 90, 131);
+}
+
+
+/*>>>>>>>>>>>>>>>>>>>>>>>> SCROLL DOWN <<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
+.scrollDown{
+    position: fixed;
+    right: 15px;
+    bottom: 50px;
+    display: flex;justify-content: center;align-items: center;
+    width: 40px; height: 40px;
+    border: 1px solid grey; border-radius: 50%;
+    cursor: pointer;
+    transition: .5s;
+    z-index: 2;
+}
+
+.scrollDown:hover{
+    border: 2px solid grey;
+    background: grey;
+}
+
+.scrollDown:hover>i{
+    color: #fff;
+}
+
+.scrollDown i{
+    color: grey;
+}
+
+
+
+@media screen and (max-width: 700px) {
+    form label{
+        display: none;
+    }
+
+    .result{
+        padding: 5px;
+    }
+
+}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" oncontextmenu="return false">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> mon ami | Recherche personalisée </title>
+    
+    <link rel="stylesheet" href="CSS/index.css">
+
+    <link rel="stylesheet" href="CSS/loader.css">
+    <link rel="shortcut icon" href="favicon.jpg" type="image/x-icon">
+
+    
+    <!-- ============= FONT =============== font-family: 'Poppins', sans-serif;-->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <!--================= FONT AWESOME ===========-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!--================= ANIMATE ON SCROOL ===========-->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="medias/brand/transparent-white.png" type="image/x-icon">
+</head>
+<body oncontextmenu="return false">
+    <h2> mon_ami </h2>
+    <div class="loader" id="loader">
+        <div class="circle"> </div>
+    </div>
+
+    <div class="scrollDown" id="scrollDown">
+        <i class="fa-solid fa-chevron-down"></i>
+    </div>
+
+    <div id="result" class="result"></div>
+
+    <form>
+        <label for="prompt">Entrez votre requête : </label>
+        <input type="text" id="prompt" placeholder=" Entrez votre requête ici ...">
+        <button id="generate">Générer</button>
+    </form>
+
+
+    <script>
+
+
+      const form = document.querySelector('form');
+      const input = form.querySelector('input');
+      const button = form.querySelector('button');
+      const result = document.querySelector('#result');
+
+      let loader = document.getElementById('loader');
+      let scrollDown = document.getElementById("scrollDown");
+      let discussion = "";
+      
+      // Fonction pour détecter si la requête a envoyé une réponse
+      function handleResponse(response) {
+        // Si la réponse est OK
+        if (response.ok) {
+          console.log('La requête a envoyé une réponse');
+          loader.classList.remove('active')
+          
+          setTimeout(function() {
+            window.scrollTo({
+              top: document.documentElement.scrollHeight,
+              behavior: 'smooth'
+            });
+          }, 1000);
+        }
+        // Si la réponse est en erreur
+        else {
+          console.log('La requête n\'a pas envoyé de réponse');
+        }
+      }
+      
+      button.addEventListener('click', (event) => {
+        loader.classList.add('active')
+        event.preventDefault();
+        const prompt = document.getElementById('prompt').value;
+      
+        // Appel à l'API de GPT-3 en utilisant la méthode POST
+        fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer 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' // Clé d'API pour l'authentification
+          },
+          body: JSON.stringify({
+            prompt: discussion + "\n\nUser: " + prompt + "\n\nAI:", // La requête de l'utilisateur et les réponses précédentes
+            max_tokens: 3000, // Le nombre maximum de tokens à générer
+            temperature: 1 // Le degré de créativité de la génération de texte
+          })
+        })
+        // Analyse de la réponse en format JSON
+        .then(response => {
+          handleResponse(response);
+          return response.json();
+        })
+        // Mise à jour de la variable discussion avec la réponse générée
+        .then(data => {
+          discussion += "<p class='question'> <span> Q: " + prompt + " </span> </p> <p class='reponse'> <span id='copier'> R: " + data.choices[0].text + " </span></p>\n\n";
+          // Affichage de la discussion complète
+          result.innerHTML = discussion.replace(/\n/g, "<br/>");
+
+
+
+
+
+
+
+
+
+        
+
+          //>>>>>>>>>>>>>>>>>>>>>>>>>>> COPIER LE TEXTE GENERé
+        /*  const paragraph = document.getElementById("copier");
+
+          paragraph.addEventListener('click', copyToClipboard);
+          
+          function copyToClipboard() {
+            // Sélectionne tout le contenu du paragraphe
+            const range = document.createRange();
+            range.selectNodeContents(paragraph);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            // Copie le contenu sélectionné dans le presse-papiers
+            document.execCommand('copy');
+            
+            // Affiche un message pour indiquer que le texte a été copié
+            alert('Le texte a été copié dans le presse-papiers !');
+            
+            // Désélectionne le contenu
+            selection.removeAllRanges();
+
+            
+  
+          }*/
+          
+
+
+
+
+
+
+
+
+
+        })
+        // Affichage d'une erreur dans la console en cas de problème avec la requête
+        .catch(error => {
+          console.error(error);
+          alert('Une erreur est survenue lors de la requête');
+          loader.classList.remove('active')
+        });
+      
+        // Réinitialisation de la valeur saisie par l'utilisateur
+        input.value = "";
+      });
+      
+      //>>>>>>>>>>>>>> SCROLLDOWN ONCLIK
+      scrollDown.onclick = ()=>{
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+
+      
+
+
+
+
+
+    </script>
+</body>
+</html>
